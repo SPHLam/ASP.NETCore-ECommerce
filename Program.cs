@@ -1,3 +1,6 @@
+using ECommerce.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
+
 namespace ECommerce
 {
     public class Program
@@ -8,6 +11,12 @@ namespace ECommerce
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Register DbContext
+            builder.Services.AddDbContext<Hshop2023Context>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 
