@@ -1,5 +1,9 @@
-using ECommerce.ApplicationDbContext;
+using Entities;
 using Microsoft.EntityFrameworkCore;
+using RepositoryContracts;
+using Repositories;
+using ServiceContracts;
+using Services;
 
 namespace ECommerce
 {
@@ -18,26 +22,26 @@ namespace ECommerce
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            var app = builder.Build();
+            builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+
+			builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+			app.UseHsts();
+			app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseAuthentication();
+			app.UseAuthorization();
+			app.MapControllers();
 
             app.Run();
         }
