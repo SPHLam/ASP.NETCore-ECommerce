@@ -6,12 +6,15 @@
         <ul class="list-unstyled fruite-categorie">
             @foreach (var category in Model)
             {
-                <div class="d-flex justify-content-between fruite-name">
-                    <a asp-controller="Category" asp-action="Index" asp-route-Id="@category.MaLoai">
-                        <i class="fas fa-apple-alt me-2">@category.TenLoai</i>
-                    </a>
-                    <span>(@category.SoLuong)</span>
-                </div>
+                <li>
+                    <div class="d-flex justify-content-between fruite-name">
+                        <a asp-controller="Category" asp-action="Index" asp-route-Id="@category.MaLoai">
+                            <i class="fas fa-apple-alt me-2"></i>
+                            @category.TenLoai
+                        </a>
+                        <span>(@category.SoLuong)</span>
+                    </div>
+                </li>
             }
         </ul>
     </div>

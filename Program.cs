@@ -22,9 +22,13 @@ namespace ECommerce
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // Categories
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-
 			builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+
+            // Products
+            builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+            builder.Services.AddScoped<IProductsService, ProductsService>();    
 
 			var app = builder.Build();
 

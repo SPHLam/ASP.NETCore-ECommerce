@@ -6,23 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities;
+using ServiceContracts;
+using ServiceContracts.DTOs;
 
 namespace ECommerce.Controllers
 {
     [Route("[controller]")]
     public class CategoryController : Controller
     {
-        private readonly Hshop2023Context _context;
-
-        public CategoryController(Hshop2023Context context)
+        private readonly ICategoriesService _categoriesService;
+        private readonly IProductsService _productsService;
+        public CategoryController(ICategoriesService categoriesService, IProductsService productsService)
         {
-            _context = context;
+            _categoriesService = categoriesService;
+            _productsService = productsService;
         }
-
         // GET: HangHoas
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int id, string searchQuery = "")
         {
-            return View();
+            List<ProductDTO> products = new List<ProductDTO>();
+            if (id != 0)
+                products = await _productsService.GetFilteredProducts(id, searchQuery);
+            else
+                products = await _productsService.GetAllProducts(searchQuery);
+
+            ViewBag.SearchQuery = searchQuery;
+            return View(products);
         }
 
         //// GET: HangHoas/Details/5
@@ -161,9 +170,9 @@ namespace ECommerce.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
 
-        private bool HangHoaExists(int id)
-        {
-            return _context.HangHoas.Any(e => e.MaHh == id);
-        }
+        //private bool HangHoaExists(int id)
+        //{
+        //    return _context.HangHoas.Any(e => e.MaHh == id);
+        //}
     }
 }
