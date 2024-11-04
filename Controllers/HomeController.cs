@@ -18,6 +18,11 @@ namespace ECommerce.Controllers
         {
             return View();
         }
+        [HttpGet("/404")]
+        public IActionResult PageNotFound()
+        {
+            return View();
+        }
 
         //public IActionResult Privacy()
         //{
