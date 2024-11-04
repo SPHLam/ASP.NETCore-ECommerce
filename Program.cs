@@ -16,6 +16,16 @@ namespace ECommerce
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Add session management
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(120);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            }); 
+
             // Register DbContext
             builder.Services.AddDbContext<Hshop2023Context>(options =>
             {
@@ -29,6 +39,9 @@ namespace ECommerce
             // Products
             builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
             builder.Services.AddScoped<IProductsService, ProductsService>();    
+
+            // Cart
+            builder.Services.AddScoped<ICartService, CartService>();
 
 			var app = builder.Build();
 
@@ -45,6 +58,7 @@ namespace ECommerce
             app.UseRouting();
             app.UseAuthentication();
 			app.UseAuthorization();
+            app.UseSession();
 			app.MapControllers();
 
             app.Run();

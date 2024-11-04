@@ -23,13 +23,17 @@ namespace ECommerce.Controllers
 		public async Task<IActionResult> Detail(int id)
 		{
 			ProductDTO? product = await _productsService.GetProductById(id);
-			CategoryDTO? category = await _categoriesService.GetCategoryByName(product.TenLoai);
+			
 			if (product == null)
 			{
 				TempData["Message"] = "Product not found!";
                 return Redirect("/404");
 			}
-			ViewBag.CategoryName = (category != null) ? category.TenLoai : "";
+			else
+			{
+                CategoryDTO? category = await _categoriesService.GetCategoryByName(product.TenLoai);
+                ViewBag.CategoryName = (category != null) ? category.TenLoai : "";
+            }
 			return View(product);
 		}
 	}
